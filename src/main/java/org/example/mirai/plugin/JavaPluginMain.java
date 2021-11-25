@@ -3,11 +3,13 @@ package org.example.mirai.plugin;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
+import net.mamoe.mirai.contact.Friend;
 import net.mamoe.mirai.event.Event;
 import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.GlobalEventChannel;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
+import net.mamoe.mirai.message.data.MessageChain;
 
 
 /**
@@ -41,11 +43,17 @@ public final class JavaPluginMain extends JavaPlugin {
         eventChannel.subscribeAlways(GroupMessageEvent.class, g -> {
             //监听群消息
             getLogger().info(g.getMessage().contentToString());
+            MessageChain message = g.getMessage();
 
         });
         eventChannel.subscribeAlways(FriendMessageEvent.class, f -> {
             //监听好友消息
             getLogger().info(f.getMessage().contentToString());
+            if ("你好".equals(f.getMessage().contentToString())){
+                System.out.println("机器人收到了打招呼的消息，正在尝试回复");
+                Friend friend = f.getFriend();
+                friend.sendMessage("你好~~~");
+            }
         });
     }
 }
